@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{%endblock%}</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap_zephyr.min.css" />
+    <!--<link rel="stylesheet" href="/static/css/main.css">-->
+    <link rel="stylesheet" href="/static/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/remixicon/remixicon.css">
+    
+    {% block css %}{%endblock%}
+</head>
+
+<body>
+    <header class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="ri-heart-2-line "></i>Dental Plus</a> 
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" id="inicio-nav" aria-current="page">Inicio <span
+                                class="visually-hidden">(current)</span></a>
+                    </li>
+                    {% if '1.1' in userInfo.permisos %}
+                    <li class="nav-item">
+                        <a class="nav-link " id="agenda-nav" href="/agenda">Agenda</a>
+                    </li>
+                    {% endif %}
+                    {% if '2.1' in  userInfo.permisos %}
+                    <li class="nav-item">
+                        <a class="nav-link  libroDiario-nav" href="/libros/diario">Libro Diario</a>
+                    </li>
+                    {% endif %}
+                    {% if '3.1' in  userInfo.permisos or '3.2' in  userInfo.permisos%}
+                    <li class="nav-item dropdown">
+                        
+                        <a class="nav-link dropdown-toggle" href="#" id="informes-nav" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Informes</a>
+                        <div class="dropdown-menu" aria-labelledby="informes-nav">
+                            {% if '3.3' in  userInfo.permisos %}
+                                <a class="dropdown-item sumYsal-nav" href="/informes/diario">Libro Diario</a>
+                            {% endif %}
+                            {% if '3.1' in  userInfo.permisos %}
+                                <a class="dropdown-item sumYsal-nav" href="/informes/libromayor">Libro Mayor</a>
+                            {% endif %}
+                            {% if '3.2' in  userInfo.permisos %}
+                            <a class="dropdown-item sumYsal-nav" href="/informes/sumasysaldos">Sumas y Saldos</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endif %}
+                    {% if '4.1' in  userInfo.permisos or '4.2' in  userInfo.permisos %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="ajustes-nav" data-bs-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">Ajustes</a>
+                        <div class="dropdown-menu" aria-labelledby="ajustes-nav">
+                            {% if '4.1' in  userInfo.permisos %}
+                                <a class="dropdown-item usuarios-nav" href="/usuarios/">Usuarios</a>
+                            {% endif %}
+                            {% if '4.2' in  userInfo.permisos %}
+                            <a class="dropdown-item ciclo-nav" href="/doctores">Doctores</a>
+                        {% endif %}
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+                    <li class="nav-item dropdown pe-3 d-flex my-2 my-lg-0">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <span class=" dropdown-toggle text-white">{{userInfo.username}}</span>
+                        </a><!-- End Profile Iamge Icon -->
+    
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>{{userInfo.nombre}} {{userInfo.apellido}}</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+    
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+    
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="/profile">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Configurar Cuenta</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+    
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="/logout">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </li>
+    
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li>
+                
+            </div>
+        </div>
+    </header>
+    
+    
+    {% block content %}{%endblock%}
+    
+    <script src="/static/jquery/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    {% block scripts %}{%endblock%}
+</body>
+
+</html>

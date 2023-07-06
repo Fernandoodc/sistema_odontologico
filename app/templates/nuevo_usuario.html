@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Agregar Usuario{% endblock%}
+{% block content %}
+{% block css %}
+
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Agregar Usuario</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item">Ajustes</li>
+                    <li class="breadcrumb-item ">Usuarios</li>
+                    <li class="breadcrumb-item active">Agregar</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Datos</h5>
+                        <div class="table-responsive-sm mt-3">
+                            <div class="container-fluid">
+                                <form action="" autocomplete="off" id="form-newUSer">
+                                    <div class="mb-3 mt-3 row">
+                                        <label for="documentos" class="col-form-label col-sm-2">Documento<span
+                                                class="text-danger obli ">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control infoUser" name="documento"
+                                                id="documento" aria-describedby="" placeholder="documento" required>
+                                        </div>
+                                        <label for="nombre" class="col-form-label col-sm-2">Nombre<span
+                                            class="text-danger obli ">*</span></label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control infoUser" name="nombre" id="nombre"
+                                            aria-describedby="" placeholder="nombre" required>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        
+                                        </div>
+                                        <label for="apellido" class="col-form-label col-sm-2">Apellido<span
+                                                class="text-danger obli ">*</span></label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control infoUser" name="apellido"
+                                                id="apellido" aria-describedby="" placeholder="apellido" required>
+                                        </div>
+                                        <label for="celular" class="col-form-label col-sm-2">Celular</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control infoUser" name="celular" id="celular"
+                                                aria-describedby="" placeholder="celular">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="email" class="col-form-label col-sm-2">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" class="form-control infoUser" name="email" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="direccion" class="col-form-label col-sm-2">Dirección</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control infoUser" name="direccion"
+                                                id="direccion">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 mt-3">
+                                        <label for="newUsername" class="col-form-label col-sm-2">Nombre de
+                                            Usuario<span class="text-danger obli ">*</span></label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group has-validation">
+                                                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                                <input type="text" class="form-control infoUser" name="newUsername"
+                                                    id="newUsername" aria-describedby="alertUsername" required>
+                                                <small id="alertUsername" class="form-text text-danger" hidden>El nombre de usuario ya se encuentra en uso</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mt-2">
+                                            <h5 class="card-title">Permisos</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3 mt-3">
+
+                                        {% for permiso in permisos %}
+                                        <div class="col-sm-3">
+                                            {{permiso.grupo}}
+                                            {% for contenido in permiso.contenido %}
+                                            <div class="form-check">
+                                                <input class="form-check-input checkPermisos" type="checkbox"
+                                                    value="{{contenido.codigo}}" id="{{contenido.codigo}}"
+                                                    name="{{contenido.codigo}}">
+                                                <label class="form-check-label" for="{{contenido.codigo}}">
+                                                    {{contenido.descripcion}}
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+
+                                        {% endfor %}
+                                    </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <label for="newPasw" class="col-form-label col-sm-2">Contraseña<span
+                                        class="text-danger">*</span></label>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <input type="password" class="form-control newPasw" name="newPasw" id="newPasw"
+                                            placeholder="" autocomplete="new-password" required>
+                                        <small class="text-danger" id="alertPaswLen" hidden>Se requieren al
+                                            menos 6
+                                            caracteres</small>
+                                    </div>
+                                </div>
+                                <label for="reNewPasw" class="col-form-label col-sm-2">Ingrese de Nuevo</label>
+                                <div class="col-sm-4">
+                                    <div class="mb-3">
+                                        <input type="password" class="form-control newPasw" name="reNewPasw"
+                                            id="reNewPasw" placeholder="" required>
+                                        <small class="text-danger" id="alertnewPasw" hidden>Las contraseñas no
+                                            coinciden</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-success" id="newUser-ok">Continuar <i
+                                            class="ri-check-double-line" hidden></i></button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#ajustes-nav').addClass('active');
+</script>
+<script src="/static/js/usuarios.js"></script>
+<script src="/static/js/update_user.js"></script>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Perfil{% endblock%}
+{% block content %}
+{% block css %}
+
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Perfil</h1>
+            <nav>
+                <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Usuario</a></li>
+                <li class="breadcrumb-item active">Perfil</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="card">
+                  <div class="card-body pt-3">
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered">
+          
+                      <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab"
+                          data-bs-target="#profile-overview">Descripción</button>
+                      </li>
+
+                      <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-empresa">Cambiar
+                          Empresa</button>
+                      </li>
+          
+                      <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Cambiar
+                          Contraseña</button>
+                      </li>
+          
+                    </ul>
+                    <div class="tab-content pt-2">
+          
+                      <div class="tab-pane fade show active" id="profile-overview">
+                        <div class="row mt-3">
+                          <div class="col-lg-3 col-md-4 label ">Nombre</div>
+                          <div class="col-lg-9 col-md-8">{{userInfo.nombre}} {{userInfo.apellido}}</div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-lg-3 col-md-4 label">Documento</div>
+                          <div class="col-lg-9 col-md-8">{{usuario.documento}}</div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-lg-3 col-md-4 label">Dirección</div>
+                          <div class="col-lg-9 col-md-8">{{usuario.direccion}}</div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-lg-3 col-md-4 label">Celular</div>
+                          <div class="col-lg-9 col-md-8">{{usuario.celular}}</div>
+                        </div>
+          
+                        <div class="row">
+                          <div class="col-lg-3 col-md-4 label">Email</div>
+                          <div class="col-lg-9 col-md-8">{{usuario.email}}</div>
+                        </div>
+          
+          
+                      </div>
+                      
+                      <div class="tab-pane fade profile-overview" id="profile-change-empresa">
+                        <form id="change-empresa">
+                          <div class="row mb-3">
+                            
+                                <label for="" class="col-form-label col-sm-2">Empresa</label>
+                                <div class="col-sm-5">
+                                  <select class="form-select form-select-sm" id="id_empresa" id="">
+                                    {% for empresa in empresas %}
+                                      {% if empresa.id_empresa == infoUser.empresa %}
+                                        <option value="{{empresa.id_empresa}}" selected>{{empresa.descripcion}}</option>
+                                      {% else %}
+                                      <option value="{{empresa.id_empresa}}">{{empresa.descripcion}}</option>
+                                      {% endif %}
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                                <div class="col-sm-1">
+                                  <button type="submit" class="btn btn-primary">Seleccionar</button>
+                                </div>
+                            
+                                
+                          </div>
+                      </form>
+                      </div>
+                      
+                      <div class="tab-pane fade pt-3" id="profile-change-password">
+                        <!-- Change Password Form -->
+                        <form id="changePassword">
+                          <div class="alert alert-danger" role="alert" id="alertPassword" hidden>
+                            <strong>Contraseña Incorrecta</strong>, Intente de nuevo
+                          </div>
+          
+                          <div class="row mb-3">
+                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Contraseña Actual<span
+                                class="text-danger">*</span></label>
+                            <div class="col-md-8 col-lg-9">
+                              <input name="password" type="password" class="form-control" id="currentPassword" required>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-3">
+                            <label for="newPasw" class="col-md-4 col-lg-3 col-form-label">Contraseña Nueva<span
+                                class="text-danger">*</span></label>
+                            <div class="col-md-8 col-lg-9">
+                              <input type="password" class="form-control newPasw" name="newPasw" id="newPasw" placeholder=""
+                                autocomplete="new-password" required>
+                              <small class="text-danger" id="alertPaswLen" hidden>Se requieren al menos 6
+                                caracteres</small>
+                            </div>
+                          </div>
+          
+                          <div class="row mb-3">
+                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Ingrese de nuevo<span
+                                class="text-danger">*</span></label>
+                            <div class="col-md-8 col-lg-9">
+                              <input type="password" class="form-control newPasw" name="reNewPasw" id="reNewPasw" placeholder=""
+                                required>
+                              <small class="text-danger" id="alertnewPasw" hidden>Las contraseñas no
+                                coinciden</small>
+                            </div>
+                          </div>
+          
+                          <div class="text-center">
+                            <button type="submit" class="btn btn-primary" id="changePasw-btn">Continuar</button>
+                          </div>
+                        </form><!-- End Change Password Form -->
+          
+                      </div>
+          
+                    </div><!-- End Bordered Tabs -->
+          
+                  </div>
+                </div>
+          
+              </div>
+        </div>
+    </section>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#ajustes-nav').addClass('active');
+</script>
+<script src="/static/js/usuarios.js"></script>
+<script src="/static/js/update_user.js"></script>
+<script>
+  const USERID = {{usuario.id | tojson}}
+</script>
+{% endblock %}

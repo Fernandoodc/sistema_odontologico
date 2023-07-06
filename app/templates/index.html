@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock%}
+{% block css %}
+    <style>
+        body{
+            background-color: #3459e6;
+          }
+          #img-logo {
+            width: 80%;
+            height: auto;
+          }
+    </style>
+{% endblock %}
+{% block content %}
+<main>
+    <section class="container text-center">
+            <img src="/static/img/welcome.png" id="img-logo" alt="Bienvenido" class="img-fluid">  
+    </section>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+  $('#inicio-nav').addClass('active');
+</script>
+{% endblock %}

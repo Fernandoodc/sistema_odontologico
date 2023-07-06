@@ -1,0 +1,72 @@
+*Registro de turnos
+	-fecha
+	-paciente
+	-Duración
+	-tipo de turno(de seguimiento, rutina, etc) opcional
+	-tratamiento (tipo opcional para dar un presupuesto al clientes, al final el dr puede cambiar ese presupuesto al momento del tratamiento)
+	
+Tratamientos
+	-Duración del tratamientos (1hr, media hr...)
+	-Presupuesto (presupuesto estimativo)
+
+*Consultorio
+	-El dr tiene que poder ver el listado y orden de pacientes a atender
+	-Cuando entra un paciente al consultorio tiene que poder seleccionar ese paciente para poder registrar los procedimientos
+	-Posibles campos de registro o ficha de paciente:
+		1. Por cada diente se debe poder cargar los siguientes campos (capaz nomas)
+		2. Diagnotico
+		3. Procedimiento/s o Tratamiento/s (limpieza de caries, extracción, etc)
+		4. Comentarios
+	-Por cada consulta debe poder registrar los medicamentos recetados
+		indicaciones de consumo
+		receta
+		se debe poder imprimir esa receta y las indicaciones
+	-Debe poder imprimir un nota o reposo
+		por ej. una nota que diga reposos por 3 dias
+		o Solicitar RX panaromica y lateral
+	- las recetas y notas deben tener la identificación del dr que les atiende
+	- Precio de la consulta (dependiente del modulo de control de cuentas y facturación de cliente)
+		con el estimativo según lo procedimentos que registró pero que se pueda editar
+		al final el dr es quien dice cuanto cuesta cada procedimiento y depende de la cara del cliente
+	-botón para ver el perfil completo del cliente
+
+Medicamentos y recetas
+	-ABM de medicamentos
+		1. descripción (solo ese campo, diferentes dosis[400 mg, 500mg] diferentes medicamentos)
+	-Emisión de recetas para pacientes
+		Si el paciente está registrado irá en su historial clinico
+		sino solo emite el pdf
+	-posibles campos:
+		1. documentos
+		2. nombre paciente
+		3. medicamentos
+			3.1) por cada medicamento su indicación de como consumir
+
+*Pacientes
+	-ABM de pacientes
+	-Perfil de pacientes
+		donde podrá ver su historial de consultas -> pdf por cada consulta
+		historial clinico(por rango de fechas) -> pdf
+		Estado de cuentas (dependiente de control de cuentas y facturación)
+		images de rx
+		fotos de su dentadura
+		archivos, pdf, etc.
+		botón para registrar un procedimiento e ir a consultorio
+		
+*Control de cuentas y facturación
+	-debe poder controlar el estado de deudas de un paciente
+	-registrar pago	
+	-emitir recibo de dinero (no factura por que estan por implementar factura electrónica)	
+
+*Informes (todos los informes o salidas que puede tener)
+	-Historial clinico de un paciente
+	-Ficha o registro de una consulta de un paciente
+	-Historial de procedimientos realizados por rango de fechas
+	-Historial de pagos de un cliente
+	-listado de cuentas de un cliente
+	-Historial de ingresos por rango de fechas
+	
+Usuarios del sistema
+	Debe tener un check de si es un dr.
+	control de acceso a distintas partes del sistema
+	multiples sesiones activas

@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% block title %}Agenda{% endblock%}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="/static/datatables/DataTables-1.13.4/css/dataTables.bootstrap5.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Agenda Diaria</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active">Agenda</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Listado de Citas
+                            <!-- Modal trigger button -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#newCita-modal">
+                                Agendar Cita
+                            </button>
+                        </h5>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" name="desde" id="desde" placeholder="Desde"
+                                        value="{{fecha}}">
+                                    <label for="desde">Fecha</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select form-select-sm" name="dr" id="dr">
+                                        <option selected>Todos</option>
+                                        {% for dr in doctores %}
+                                        <option value="">{{ dr.1 }} {{ dr.2 }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="dr">Doctor</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-3 ">
+                        <div class="table-responsive-sm">
+                            <table class="table table-default" id="agenda">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th scope="col">Hora</th>
+                                        <th scope="col">Duración</th>
+                                        <th scope="col">Paciente</th>
+                                        <th scope="col">Dr.</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--<tr>
+                                        <th>15:30</th>
+                                        <th>30 min</th>
+                                        <th>
+                                            <a href="/pacientes/" target="_blank" rel="noopener noreferrer">Fernando
+                                                Fernández</a> <br>
+                                            <small class="text-muted"><i class="ri-phone-line"></i> +5959
+                                                991625779</small>
+                                        </th>
+                                        <th>
+                                            Dr. Julano Romero
+                                        </th>
+                                        <th>
+                                            <span class="p-1 ps-2 pe-2  text-white rounded-5 bg-primary">En
+                                                espera</span>
+                                        </th>
+                                    </tr>-->
+                                    {% for cita in citas %}
+                                        <tr>
+                                            <th>{{ cita.0 | strftime('%H:%M')}}</th>
+                                            <th>{{cita.1}} min</th>
+                                            <th>
+                                                <a href="/pacientes/" target="_blank" rel="noopener noreferrer">{{cita.2}}
+                                                    {{cita.3}}</a> <br>
+                                                <small class="text-muted"><i class="ri-phone-line"></i> {{cita.4}} </small>
+                                            </th>
+                                            <th>
+                                                {{cita.5}} {{cita.6}}
+                                            </th>
+                                            <th>
+                                                <span class="p-1 ps-2 pe-2  text-white rounded-5 bg-primary">En
+                                                    espera</span>
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" id="newCita-modal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+        aria-labelledby="newCita-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCita-title">Agendar una nueva Cita</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert" id="newCita-alert" style="display: none;">
+                        <strong></strong>
+                    </div>
+                    
+                    <form id="newCita-form" name="newCita-form">
+                        <div class="mb-3 row">
+                            <label for="pacienteId" class="col-sm-2 col-form-label">Paciente<span
+                                class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <select class="form-select form-select-sm pacienteId" name="pacienteId" id="pacienteId"
+                                    required>
+                                    {% for paciente in pacientes %}
+                                    <option value="{{paciente.id_paciente}}">{{paciente.documento}} -
+                                        {{paciente.nombre}} {{paciente.apellido}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="ms-2 col-sm-10 form-check form-switch">
+                                <input class="form-check-input" type="checkbox" value="newPaciente" id="newPaciente">
+                                <label class="form-check-label" for="newPaciente">
+                                    Nuevo Paciente
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Nuevo Paciente -->
+                        <div class="row mb-3 newPaciente-div">
+                            <hr>
+                            <label for="newDocumento" class="col-form-label col-sm-2">Documento<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control form-control-sm" min="0" name="newDocumento"
+                                    id="newDocumento" aria-describedby="newDocumento-alert" placeholder="">
+                                <small id="newDocumento-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 newPaciente-div">
+                            <label for="newNombre" class="col-form-label col-sm-2">Nombre<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" min="0" name="newNombre"
+                                    id="newNombre" aria-describedby="newNombre-alert" placeholder="">
+                                <small id="newNombre-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 newPaciente-div">
+                            <label for="newApellido" class="col-form-label col-sm-2">Apellido<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" min="0" name="newApellido"
+                                    id="newApellido" aria-describedby="newApellido-alert" placeholder="">
+                                <small id="newApellido-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 newPaciente-div">
+                            <label for="newCelular" class="col-form-label col-sm-2">Celular</label>
+                            <div class="col-sm-10">
+                                <input type="tel" class="form-control form-control-sm" min="0" name="newCelular"
+                                    id="newCelular" aria-describedby="newCelular-alert" placeholder="">
+                                <small id="newCelular-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 newPaciente-div">
+                            <label for="newEmail" class="col-form-label col-sm-2">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control form-control-sm" min="0" name="newEmail"
+                                    id="newEmail" aria-describedby="newEmail-alert" placeholder="">
+                                <small id="newEmail-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 newPaciente-div">
+                            <label for="newDireccion" class="col-form-label col-sm-2">Dirección</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-sm" min="0" name=""
+                                    id="newDireccion" aria-describedby="newDireccion-alert" placeholder="">
+                                <small id="newDireccion-alert" class="form-text text-muted"></small>
+                            </div>
+                            <hr>
+                        </div>
+                        <!-- Fin Nuevo Paciente -->
+                        <div class="row mb-3">
+                            <label for="idDoctor" class="col-form-label col-sm-2">Doctor<span
+                                class="text-danger">*</span></label>
+                            <div class="col-sm-10">
+                                <select class="form-select form-select-sm" name="idDoctor" id="idDoctor" required>
+                                    {% for doctor in doctores %}
+                                    <option value="{{doctor.id_doctor}}">{{doctor.nombre}} {{doctor.apellido}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="fecha" class="col-form-label col-sm-2">Fecha<span
+                                class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="date" class="form-control" name="fecha" id="fecha"
+                                    aria-describedby="fecha-alert" placeholder="" required>
+                                <small id="fecha-alert" class="form-text text-muted"></small>
+                            </div>
+                            <label for="hora" class="col-form-label col-sm-2">Hora<span
+                                class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-select form-select-sm" name="hora" id="hora" required>
+                                </select>
+                                <small id="hora-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="duracion" class="col-form-label col-sm-2">Duración<span
+                                class="text-danger">*</span></label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="number" id="duracion" name="duracion" value="30" class="form-control"
+                                        required>
+                                    <select class="form-select  input-group-text" name="tDuracion" id="tDuracion">
+                                        <option value="min">min</option>
+                                        <option value="hr">hr</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="newCita-form" class="btn btn-primary" id="newCita-submit">Agendar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#agenda-nav').addClass('active');
+</script>
+<script src="/static/datatables/datatables.min.js"></script>
+<script src="/static/datatables/DataTables-1.13.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="/static/js/agenda/agenda.js"></script>
+<script>
+    // In your Javascript (external .js resource or <script> tag)
+    $(document).ready(function () {
+
+        $('.pacienteId, #idDoctor').select2({
+            dropdownParent: $('#newCita-modal .modal-body'),
+            theme: "bootstrap-5",
+
+        });
+        $('#agenda').DataTable({
+            language: spanish,
+        });
+    });
+</script>
+<script>
+    window.onload = function () {
+        var selectTime = document.getElementById("hora");
+        var startTime = "08:00";
+        var endTime = "21:00";
+        var startHour = parseInt(startTime.split(":")[0]);
+        var startMinute = parseInt(startTime.split(":")[1]);
+        var endHour = parseInt(endTime.split(":")[0]);
+        var endMinute = parseInt(endTime.split(":")[1]);
+
+        // Generar las opciones dentro del rango de tiempo
+        for (var i = startHour; i <= endHour; i++) {
+            var minuteOffset = (i === startHour) ? Math.ceil(startMinute / 30) * 30 : 0;
+            var j = (i === startHour) ? startMinute : 0;
+            for (; j < 60; j += 30) {
+                if (i === endHour && j > endMinute) {
+                    break;
+                }
+                var hourText = (i < 10) ? "0" + i : i;
+                var minuteText = (j < 10) ? "0" + j : j;
+                var optionText = hourText + ":" + minuteText;
+                var optionValue = hourText + ":" + minuteText;
+                var option = new Option(optionText, optionValue);
+                selectTime.add(option);
+            }
+        }
+    };
+</script>
+{% endblock %}

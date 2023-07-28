@@ -6,6 +6,7 @@ load_dotenv()
 
 templates = Jinja2Templates(directory="templates")
 templates.env.filters["strftime"] = _jinja2_filter_strftime
+
 class Settings:
     PROJECT_TITLE: str = ""
     PROJECT_VERSION: str = "0.1"

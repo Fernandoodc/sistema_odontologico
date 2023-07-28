@@ -1,0 +1,127 @@
+    <!-- Modal Body -->
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" id="newPaciente-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        role="dialog" aria-labelledby="newPaciente-modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newPaciente-modalTitle">Nuevo Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" id="newPaciente-alert" role="alert" style="display: none;">
+                        <strong></strong>
+                    </div>
+                    <form id="pacientes-form" class="pacientes-form">
+                        <div class="row mb-3 ">
+                            <label for="newDocumento" class="col-form-label col-lg-2">Documento<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="number" class="form-control form-control-sm paciente-input" min="0" name="newDocumento"
+                                    id="newDocumento" aria-describedby="newDocumento-alert" placeholder="" required>
+                                <small id="newDocumento-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label for="newNombre" class="col-form-label col-lg-2">Nombre<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control form-control-sm paciente-input" min="0" name="newNombre"
+                                    id="newNombre" aria-describedby="newNombre-alert" placeholder="" required autocomplete="off">
+                                <small id="newNombre-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label for="newApellido" class="col-form-label col-lg-2">Apellido<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control form-control-sm paciente-input" min="0" name="newApellido"
+                                    id="newApellido" aria-describedby="newApellido-alert" placeholder="" required autocomplete="off">
+                                <small id="newApellido-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="newFechNac" class="col-form-label col-lg-2">Fecha de Nac.<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-3">
+                                <input type="date" class="form-control form-control-sm paciente-input" min="0" name="newFechNac"
+                                    id="newFechNac" aria-describedby="newFechNac-alert" placeholder="" required>
+                                <small id="newFechNac-alert" class="form-text text-muted"></small>
+                            </div>
+                            <label for="newSexo" class="col-form-label col-lg-1">Sexo<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    <select class="form-select form-select-sm paciente-input" name="newSexo" id="newSexo" required>
+                                        <option value="0" selected>Masculino</option>
+                                        <option value="1">Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label for="newEstCivil" class="col-form-label col-lg-2">Estado Civil<span
+                                    class="text-danger">*</span></label>
+                            <div class="col-lg-2">
+                                <div class="mb-3">
+                                    <select class="form-select form-select-sm paciente-input" name="newEstCivil" id="newEstCivil"
+                                        required>
+                                        {% for ec in estCiviles %}
+                                        <option value="{{ec.id_ec}}">{{ec.descripcion}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="row mb-3">
+                            <label for="newProfesion" class="col-form-label col-lg-2">Profesión</label>
+                            <div class="mb-3 col-lg-10">
+                                <select class="form-select form-select-sm" name="newProfesion" id="newProfesion">
+                                    {% for profesion in profesiones %}
+                                        <option value="{{profesion.id_profesion}}">{{profesion.descripcion}}</option>
+                                    {% endfor %}
+                                    <option value="other">Otro</option>
+                                </select>
+                                <div class="row otherProf-div" hidden>
+                                            <div class="col sm-12">
+                                                <div class="form-floating mb-3 mt-3">
+                                                    <input type="text" class="form-control" name="otherProf"
+                                                        id="otherProf" placeholder="Tipo">
+                                                    <label for="otherProf">Profesión</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </div>
+                        </div>-->
+                        <div class="row mb-3 ">
+                            <label for="newCelular" class="col-form-label col-lg-2">Celular</label>
+                            <div class="col-lg-10">
+                                <input type="tel" class="form-control form-control-sm paciente-input" min="0" name="newCelular"
+                                    id="newCelular" aria-describedby="newCelular-alert" placeholder="">
+                                <small id="newCelular-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label for="newEmail" class="col-form-label col-lg-2">Email</label>
+                            <div class="col-lg-10">
+                                <input type="email" class="form-control form-control-sm paciente-input" min="0" name="newEmail"
+                                    id="newEmail" aria-describedby="newEmail-alert" placeholder="">
+                                <small id="newEmail-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3 ">
+                            <label for="newDireccion" class="col-form-label col-lg-2">Dirección</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control form-control-sm paciente-input" min="0" name=""
+                                    id="newDireccion" aria-describedby="newDireccion-alert" placeholder="">
+                                <small id="newDireccion-alert" class="form-text text-muted"></small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="pacientes-modalfooter">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" id="newPaciente-submit" form="pacientes-form"
+                        class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Agenda{% endblock%}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="/static/datatables/DataTables-1.13.4/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Pacientes</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active">Pacientes</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Listado de Pacientes
+                            <!-- Modal trigger button -->
+                            <button type="button" class="btn btn-primary" title="Agregar Paciente" id="newPaciente-btn">
+                                <i class="ri-user-add-line"></i>
+                            </button>
+                            <a name="" id="" class="btn btn-lg" title="Refrescar Tabla" href="" role="button"><i class="ri-refresh-line"></i></a>
+                        </h5>
+                    </div>
+                    <div class="row m-3 ">
+                        <div class="table-responsive-sm">
+                            <table class="table table-default" id="pacientes-table">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th scope="col">Documento</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellido</th>
+                                        <th scope="col">Celular</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for paciente in pacientes %}
+                                        <tr id="{{paciente.id_paciente}}">
+                                            <td>{{paciente.documento}}</td>
+                                            <td>{{paciente.nombre}}</td>
+                                            <td>{{paciente.apellido}}</td>
+                                            <td>{{paciente.celular}}</td>
+                                            <td>
+                                                <!--<button type="button" onclick="infoPaciente({{paciente.id_paciente}})" class="btn btn-primary">Ver</button>-->
+                                                <a name="" id="" class="btn btn-primary" href="ver/{{paciente.id_paciente}}/" role="button" title="Ver Paciente"><i class="ri-folder-user-fill"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- Nuevo Paciente Modal Body -->
+    {% include 'modals/newpaciente.html' %}
+    
+    <!-- Eliminar Paciente Modal -->
+    {% include 'modals/deletepaciente.html' %}
+    
+    
+    
+    
+    
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#pacientes-nav').addClass('active');
+</script>
+<script src="/static/datatables/datatables.min.js"></script>
+<script src="/static/datatables/DataTables-1.13.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="/static/js/pacientes/pacientes.js"></script>
+{% endblock %}

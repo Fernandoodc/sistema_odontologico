@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% block title %}Agenda{% endblock%}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="/static/datatables/DataTables-1.13.4/css/dataTables.bootstrap5.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Pacientes</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="/pacientes">Pacientes</a></li>
+                    <li class="breadcrumb-item ">Ver Paciente</li>
+                    <li class="breadcrumb-item active">Ficha</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">{{paciente.nombre}} {{paciente.apellido}}
+                        </h5>
+                        <small class="mt-0">{{edad_paciente(paciente.id_paciente)}}</small>
+                    </div>
+                    <!-- Paciente nav -->
+                    {% include 'elementos/pacientes-nav.html' %}
+                    <!-- end nav -->
+                    <div class="card-body">
+                        <div class="alert alert-warning" id="alert-ficha" role="alert" hidden>
+                            <strong></strong>  <button type="button" id="cargarFicha" class="btn btn-secondary">Cargar Ficha</button>
+                        </div>
+                        <form id="ficha-form" name="ficha-form">
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <h5>Historial Médico</h5>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                {% for pregunta in preguntas %}
+                                <div class="col-lg-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input check-preguntas fichaPaciente" type="checkbox" value="true"
+                                            id="preg-{{pregunta.id_pregunta}}">
+                                        <label class="form-check-label" for="preg-{{pregunta.id_pregunta}}">
+                                            {{pregunta.pregunta}}
+                                        </label>
+                                        {% if pregunta.sub_pregunta %}
+                                            <div class="form-floating mb-3 preg-{{pregunta.id_pregunta}}-res" id="preg-{{pregunta.id_pregunta}}-redDiv" hidden>
+                                                <input type="text" class="form-control res-preguntas fichaPaciente preg-{{pregunta.id_pregunta}}-res" name="preg-{{pregunta.id_pregunta}}-res"
+                                                    id="preg-{{pregunta.id_pregunta}}-res" placeholder="{{pregunta.sub_pregunta}}">
+                                                <label for="preg-{{pregunta.id_pregunta}}-res preg-{{pregunta.id_pregunta}}-res" >{{pregunta.sub_pregunta}}</label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <b>¿Fue afectado o es portador de las siguiente enfermedades?</b>
+                                </div>
+                            </div>
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mb-3">
+                                {% for enfermedad in enfermedades %}
+                                <div class="col-lg-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input enfermedades fichaPaciente" type="checkbox" value="true"
+                                            id="enf-{{enfermedad.id_enfermedad}}">
+                                        <label class="form-check-label" for="enf-{{enfermedad.id_enfermedad}}">
+                                            {{enfermedad.descripcion}}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control fichaPaciente" name="otroEnf-ficha" id="otroEnf-ficha"
+                                            placeholder="Otras enfermedades">
+                                        <label for="otroEnf-ficha">Otras enfermedades</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-6" {% if paciente.sexo == 0 %} hidden {% endif %}>
+                                    <label for="" class="form-check-label">Declara estar embarazada:</label><br>
+                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                        <input type="radio" value="1" class="btn-check fichaPaciente embarazo-radio" name="embarazo-radio" id="embarazo-si"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-success" for="embarazo-si">Si</label>
+
+                                        <input type="radio" value="0" class="btn-check fichaPaciente embarazo-radio" name="embarazo-radio" id="embarazo-no"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="embarazo-no">No</label>
+
+                                        <input type="radio" value="2" class="btn-check fichaPaciente embarazo-radio" name="embarazo-radio" id="embarazo-nose"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-info" for="embarazo-nose">No sabe</label>
+                                    </div>
+                                    <div class="form-floating mb-3" id="embarazo-radio-inputdiv">
+                                        <input type="text" class="form-control fichaPaciente" name="embarazo-tiempo"
+                                            id="embarazo-tiempo" placeholder="Cuanto Tiempo" autocomplete="off">
+                                        <label for="embarazo-tiempo">Cuanto Tiempo</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 ">
+                                    <label class="form-check-label" for="">
+                                        ¿Tolera la anestesia de uso odontólogico?:
+                                    </label><br>
+                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                        <input type="radio" value="1" class="btn-check fichaPaciente" name="anestesia-radio" id="anestesia-si"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-success" for="anestesia-si">Si</label>
+
+                                        <input type="radio" value="0" class="btn-check fichaPaciente" name="anestesia-radio" id="anestesia-no"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-danger" for="anestesia-no">No</label>
+
+                                        <input type="radio" value="2" class="btn-check fichaPaciente" name="anestesia-radio" id="anestesia-nose"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-info" for="anestesia-nose">Nunca Tomé</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="" class="form-check-label">¿Se hizo alguna vez el test de Elisa?</label><br>
+                                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                        <input type="radio" value="1" class="btn-check fichaPaciente test-elisa-radio" name="test-elisa-radio" id="test-elisa-si"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-success" for="test-elisa-si">Si</label>
+
+                                        <input type="radio" value="0" class="btn-check fichaPaciente test-elisa-radio" name="test-elisa-radio" id="test-elisa-no"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-danger" for="test-elisa-no">No</label>
+
+                                        <input type="radio" value="2" class="btn-check fichaPaciente test-elisa-radio" name="test-elisa-radio" id="test-elisa-nose"
+                                            autocomplete="off">
+                                        <label class="btn btn-outline-info" for="test-elisa-nose">No sabe</label>
+                                    </div>
+                                    <div class="form-floating mb-3" id="test-elisa-radio-inputdiv">
+                                        <input type="text" class="form-control fichaPaciente" name="test-elisa-tiempo"
+                                            id="test-elisa-tiempo" placeholder="Cuanto Tiempo" autocomplete="off">
+                                        <label for="test-elisa-tiempo">Hace cuanto</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <h5>Antecendentes Odontólogicos</h5>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="" class="form-label">Tiempo que páso de su última consulta
+                                        odontólogica</label>
+                                    <div class="input-group">
+                                        <input type="number" min="0" id="time-ult-consulta" name="time-ult-consulta"
+                                            class="form-control fichaPaciente">
+                                        <select class="form-select input-group-text fichaPaciente" name="uni-time-ult-consulta"
+                                            id="uni-time-ult-consulta">
+                                            <option value="mes" selected>Meses</option>
+                                            <option value="anio">Años</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="cant-cepillado" class="form-label">Cuenta veces al día se
+                                            cepilla?</label>
+                                        <input type="number" min="0" id="cant-cepillado" name="cant-cepillado"
+                                            class="form-control fichaPaciente">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="elementos_higiene" class="form-label">Que elementos usa para su
+                                            higiene dental?:</label>
+                                        <select multiple class="form-select form-select-lg fichaPaciente" name="elementos_higiene"
+                                            id="elementos_higiene">
+                                            {% for elemento in elementosHigiene %}
+                                                <option value="{{elemento.id_elemento}}">{{elemento.descripcion}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="form-floating mt-1">
+                                          <input
+                                            type="text"
+                                            class="form-control" name="otros_elementos_higiene" id="otros_elementos_higiene" placeholder="Otros:">
+                                          <label for="otros_elementos_higiene">Otros:</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="motivos-perdida" class="form-label">La perdida de su/s dientes fue
+                                            por:</label>
+                                        <select multiple class="form-select form-select-lg fichaPaciente" name="motivos-perdida"
+                                            id="motivos-perdida">
+                                            {% for causa in causasPerdidas %}
+                                            <option value="{{causa.id_causa}}">{{causa.descripcion}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="causas-falta-trato" class="form-label">No trató sus dientes
+                                            por:</label>
+                                        <select multiple class="form-select form-select-lg fichaPaciente" name="causas-falta-trato"
+                                            id="causas-falta-trato">
+                                            {% for causa in cuasasFaltaTrato %}
+                                            <option value="{{causa.id_causa}}">{{causa.descripcion}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <div class="form-floating mt-1">
+                                          <input
+                                            type="text"
+                                            class="form-control fichaPaciente" name="otros-causas-falta-trato" id="otros-causas-falta-trato" placeholder="Otros:">
+                                          <label for="otros-causas-falta-trato">Otros:</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                      <label for="comentarios" class="form-label">Comentarios</label>
+                                      <textarea class="form-control fichaPaciente" name="comentarios" id="comentarios" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col-lg-12 text-end" id="ficha-footer">
+                                <button type="button" id="editarFicha-btn"
+                                    class="btn btn-primary " title="Editar"
+                                    ><i class="ri-edit-box-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#ficha-pnav, #clinica-pnav').addClass('active');
+    const idPaciente = {{paciente.id_paciente | tojson}} 
+</script>
+
+<script src="/static/datatables/datatables.min.js"></script>
+<script src="/static/datatables/DataTables-1.13.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="/static/js/pacientes/fichas/fichas.js"></script>
+{% endblock %}

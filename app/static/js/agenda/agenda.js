@@ -1,20 +1,8 @@
-$('#newCita-modal').on('shown.bs.modal', function (e) {
-    $('.newPaciente-div').hide()
+$('#newCita-modal').on('show.bs.modal', function (e) {
+    //$('.newPaciente-div').hide()
     $('#newCita-alert').hide();
-    $("#newPaciente-form").trigger("reset");
-    $('#newPaciente').prop('checked', false);
+    //$('#newPaciente').prop('checked', false);
 })
-
-$('#newPaciente').change(function (e) { 
-    e.preventDefault();
-    var newPaciente = $(this)
-    if(newPaciente.is(':checked') == true){
-        $('.newPaciente-div').show()
-    }
-    else{
-        $('.newPaciente-div').hide()
-    }
-});
 
 $('#newCita-form').submit(function (e) { 
     e.preventDefault();
@@ -65,4 +53,16 @@ $('#tDuracion').change(function (e) {
         $('#duracion').val(1);
     else
     $('#duracion').val(30);
+});
+
+
+
+$('#filtrar-citas').click(function (e) {
+    e.preventDefault();
+    var fecha = $('#desde').val();
+    var dr = $('#dr').val();
+    if(dr == null || dr == 'null'){
+        location.href = '/agenda?' + $.param({ 'fecha': fecha})
+    }else
+        location.href = '/agenda?' + $.param({ 'fecha': fecha, 'idDoctor': dr })
 });

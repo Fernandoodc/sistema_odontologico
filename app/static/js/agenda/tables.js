@@ -1,4 +1,5 @@
-//inserta fila en la tabla de agenda diaria
-function insertFilaAgenda(datos){
-    
-}
+$(document).ready(function () {
+    $('#agenda').DataTable({
+        language: spanish,
+    });
+});

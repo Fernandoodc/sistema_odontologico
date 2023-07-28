@@ -1,0 +1,29 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="/pacientes/ver/{{paciente.id_paciente}}" id="datos-pnav" class="nav-link" aria-current="page" title="Datos"><i class="fa-solid fa-user"></i> Datos</a>
+    </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="clinica-pnav" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Clinica"><i class="fa-solid fa-file-medical"></i> Clinica</a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" id="ficha-pnav" href="/pacientes/ver/{{paciente.id_paciente}}/ficha">Ficha</a>
+            <a class="dropdown-item" id="citas-pnav" href="#">Citas</a>
+            <a class="dropdown-item" id="presupuestos-pnav" href="#">Presupuestos</a>
+            <a class="dropdown-item" id="imagenes-pnav" href="#">Imagenes</a>
+            <a class="dropdown-item" id="documentos-pnav" href="#">Documentos</a>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" id="tratamiento-pnav" title="Tratamiento"><i class="fa-solid fa-stethoscope"></i> Tratamiento</a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" id="odontograma-pnav" title="Odontograma"><i class="fa fa-tooth"></i> Odontograma</a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" id="reportes-pnav" title="Reportes"><i class="fa fa-chart-simple"></i> Reportes</a>
+    </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link" id="pagos-pnav" title="Pagos"><i class="fa-solid fa-dollar-sign"></i> Pagos</a>
+    </li>
+</ul>
+<!-- Fonts Awesone cdn -->
+<script src="https://kit.fontawesome.com/39328f5e8f.js" crossorigin="anonymous"></script>

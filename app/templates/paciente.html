@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Agenda{% endblock%}
+{% block content %}
+{% block css %}
+<link rel="stylesheet" href="/static/datatables/DataTables-1.13.4/css/dataTables.bootstrap5.min.css">
+{% endblock %}
+<main>
+    <section class="container">
+        <div class="pagetitle mt-3">
+            <h1>Paciente</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="/pacientes">Pacientes</a></li>
+                    <li class="breadcrumb-item active">Ver Paciente</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">{{paciente.nombre}} {{paciente.apellido}}
+                        </h5>
+                        <small class="mt-0">{{edad_paciente(paciente.id_paciente)}}</small>
+                    </div>
+                    <!-- Paciente nav -->
+                    {% include 'elementos/pacientes-nav.html' %}
+                    <!-- end nav -->
+                    <div class="row m-3">
+                        <div class="col-lg-12">
+                            <form id="pacientes-form" class="pacientes-form">
+                                <div class="row mb-3 ">
+                                    <label for="newDocumento" class="col-form-label col-lg-2">Documento<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input type="number" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newDocumento" id="newDocumento" aria-describedby="newDocumento-alert"
+                                            placeholder="" required>
+                                        <small id="newDocumento-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 ">
+                                    <label for="newNombre" class="col-form-label col-lg-2">Nombre<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newNombre" id="newNombre" aria-describedby="newNombre-alert"
+                                            placeholder="" required>
+                                        <small id="newNombre-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 ">
+                                    <label for="newApellido" class="col-form-label col-lg-2">Apellido<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newApellido" id="newApellido" aria-describedby="newApellido-alert"
+                                            placeholder="" required>
+                                        <small id="newApellido-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label for="newFechNac" class="col-form-label col-lg-2">Fecha de Nac.<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-3">
+                                        <input type="date" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newFechNac" id="newFechNac" aria-describedby="newFechNac-alert"
+                                            placeholder="" required>
+                                        <small id="newFechNac-alert" class="form-text text-muted"></small>
+                                    </div>
+                                    <label for="newSexo" class="col-form-label col-lg-1">Sexo<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-2">
+                                        <div class="mb-3">
+                                            <select class="form-select form-select-sm paciente-input" name="newSexo"
+                                                id="newSexo" required>
+                                                <option value="0" selected>Masculino</option>
+                                                <option value="1">Femenino</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <label for="newEstCivil" class="col-form-label col-lg-2">Estado Civil<span
+                                            class="text-danger">*</span></label>
+                                    <div class="col-lg-2">
+                                        <div class="mb-3">
+                                            <select class="form-select form-select-sm paciente-input" name="newEstCivil"
+                                                id="newEstCivil" required>
+                                                {% for ec in estCiviles %}
+                                                <option value="{{ec.id_ec}}">{{ec.descripcion}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="row mb-3">
+                                    <label for="newProfesion" class="col-form-label col-lg-2">Profesión</label>
+                                    <div class="mb-3 col-lg-10">
+                                        <select class="form-select form-select-sm" name="newProfesion" id="newProfesion">
+                                            {% for profesion in profesiones %}
+                                                <option value="{{profesion.id_profesion}}">{{profesion.descripcion}}</option>
+                                            {% endfor %}
+                                            <option value="other">Otro</option>
+                                        </select>
+                                        <div class="row otherProf-div" hidden>
+                                                    <div class="col sm-12">
+                                                        <div class="form-floating mb-3 mt-3">
+                                                            <input type="text" class="form-control" name="otherProf"
+                                                                id="otherProf" placeholder="Tipo">
+                                                            <label for="otherProf">Profesión</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>-->
+                                <div class="row mb-3 ">
+                                    <label for="newCelular" class="col-form-label col-lg-2">Celular</label>
+                                    <div class="col-lg-10">
+                                        <input type="tel" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newCelular" id="newCelular" aria-describedby="newCelular-alert"
+                                            placeholder="">
+                                        <small id="newCelular-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 ">
+                                    <label for="newEmail" class="col-form-label col-lg-2">Email</label>
+                                    <div class="col-lg-10">
+                                        <input type="email" class="form-control form-control-sm paciente-input" min="0"
+                                            name="newEmail" id="newEmail" aria-describedby="newEmail-alert"
+                                            placeholder="">
+                                        <small id="newEmail-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3 ">
+                                    <label for="newDireccion" class="col-form-label col-lg-2">Dirección</label>
+                                    <div class="col-lg-10">
+                                        <input type="text" class="form-control form-control-sm paciente-input" min="0"
+                                            name="" id="newDireccion" aria-describedby="newDireccion-alert"
+                                            placeholder="">
+                                        <small id="newDireccion-alert" class="form-text text-muted"></small>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer" id="pacientes-modalfooter">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <!-- Eliminar Paciente Modal -->
+    {% include 'modals/deletepaciente.html' %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('#datos-pnav').addClass('active');
+    $(document).ready(function () {
+        infoPaciente({{paciente.id_paciente | tojson}})
+    });
+    
+</script>
+
+<script src="/static/datatables/datatables.min.js"></script>
+<script src="/static/datatables/DataTables-1.13.4/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script src="/static/js/pacientes/pacientes.js"></script>
+{% endblock %}

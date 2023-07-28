@@ -216,6 +216,10 @@ var spanish = {
     "infoEmpty": "No hay datos para mostrar"
 }
 
+/**
+ * Funcion para devolver la fecha actual, en formato Y-m-d o Y-m-dThr:min
+ * @param {int = 1} format - formato de salida (0 = fecha y hora ; 1 = solo la fecha)
+ */
 function date(format = 1) {
     var f = new Date()
     var year = f.getFullYear()
@@ -262,4 +266,3 @@ const formatNumberES = (n, d=0) => {
     }
     return n;
 }
-

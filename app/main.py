@@ -7,6 +7,7 @@ from routers.login import Login
 from routers.usuarios import Usuarios
 from routers.agenda import agenda
 from routers.doctores import doctores
+from routers.pacientes import pacientes
 import uvicorn
 from config import templates
 from database.conexion import SessionLocal, engine
@@ -21,6 +22,7 @@ app.include_router(Login)
 app.include_router(Usuarios, prefix='/usuarios')
 app.include_router(agenda, prefix='/agenda')
 app.include_router(doctores, prefix='/doctores')
+app.include_router(pacientes, prefix='/pacientes')
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.exception_handler(status.HTTP_404_NOT_FOUND)
@@ -39,4 +41,4 @@ async def index(request: Request, user=Depends(manager)):
 async def index(request: Request, user=Depends(manager)):
     return templates.TemplateResponse('index.html', context={'request': request, 'userInfo': user})
 if __name__ == "__main__":
-    uvicorn.run(app, host='0.0.0.0')
+    uvicorn.run(app, host='0.0.0.0',)

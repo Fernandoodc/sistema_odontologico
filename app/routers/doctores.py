@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from fastapi.templating import Jinja2Templates
 from fastapi import Request, Response
 from fastapi import status
@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 from manager import	 manager
 from config import settings
+from sqlalchemy.sql import or_
 from sqlalchemy.orm import Session
 from database.conexion import get_db
 from database.models import User, Permisos, Doctores, Especialidades
@@ -33,6 +34,29 @@ async def listaUsuarios(request: Request, id:str='', user=Depends(manager), db :
             'especialidad': i[6]
         })
     return templates.TemplateResponse('doctores.html', context={'request': request, 'usuarios': drs, 'permisos': permisos, 'id':id,  'userInfo': user})
+
+#busca doctores según nombre, apellido o numerod e registro
+"""
+@parametros:
+    q = texto a buscar
+"""
+@doctores.get("/search")
+async def search_items(q: str,  user=Depends(manager), db : Session = Depends(get_db)):
+    controlAcceso(user=user, typeRequired='1.1')
+    #drs = db.query(Doctores).filter(Doctores.id_doctor.ilike(f"%{q}%")).offset(offset).limit(page_size).all()
+    doctores = db.query(User.id ,User.username, User.nombre, User.apellido , User.documento, Doctores.registro, Especialidades.descripcion).join(User).join(Especialidades).filter(or_(User.nombre.ilike(f"%{q}%"), User.apellido.ilike(f"%{q}%"), Doctores.registro.ilike(f"%{q}%"))).all()
+    drs = {'doctores': []}
+    for i in doctores:
+        drs['doctores'].append({
+            'id': i[0],
+            'username': i[1],
+            'nombre': i[2],
+            'apellido': i[3],
+            'documento': i[4],
+            'registro': i[5],
+            'especialidad': i[6]
+        })
+    return drs
 
 
 @doctores.get('/nuevo_usuario')
